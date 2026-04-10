@@ -1,0 +1,29 @@
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test files
+test/
+*.test.md
+
+# Temp files
+*.tmp
+*.bak
+.temp/
+
+# Personal notes
+notes/
+scratch/
