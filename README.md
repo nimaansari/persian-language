@@ -1,4 +1,4 @@
-# Persian Language Skill 🇮🇷
+# Persian Language Skill 
 
 An [OpenClaw](https://openclaw.ai) capability layer that gives your AI native-level Persian (Farsi) fluency across any task.
 
