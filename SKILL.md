@@ -1,7 +1,7 @@
 ---
 name: persian-language
 description: Enhances AI ability to read, write, translate, and format Persian (Farsi) with native-level accuracy across any task. Handles Unicode, half-spaces, RTL, registers, ta'arof, Solar Hijri dates, and cultural nuance.
-metadata: {"openclaw": {"emoji": "🇮🇷"}}
+metadata: {"openclaw": {"emoji": "📝"}}
 ---
 
 # Persian Language Skill
@@ -38,9 +38,13 @@ Activate this skill when any of the following are true:
 ### 2. Format Persian Output Correctly
 
 - Use Persian punctuation: «» for quotes, ، for comma, ؛ for semicolon, ؟ for question mark
-- Default to Persian numerals (۱۲۳۴۵۶۷۸۹۰) unless the context is technical/code
-- Respect right-to-left (RTL) text direction — do not let punctuation or Latin fragments break flow
+- Default to **Persian digits** (۰۱۲۳۴۵۶۷۸۹, U+06F0–U+06F9) in prose — **not** Arabic-Indic digits (٠١٢٣٤٥٦٧٨٩, U+0660–U+0669), which look similar but are wrong in Persian
+- Use Persian numeric separators: **٬** (U+066C) for thousands, **٫** (U+066B) for decimal, **٪** (U+066A) for percent — never `,` `.` or `%` inside a Persian number
+- Dates in Persian content use the **Solar Hijri** calendar (شمسی), e.g. ۲۴ فروردین ۱۴۰۵
+- Keep Western digits in code, technical IDs, versions, ports, URLs, and anything inside a code block
+- Respect right-to-left (RTL) text direction — do not let punctuation or Latin fragments break flow, and never manually reverse digits to "fix" their display
 - In mixed content, isolate LTR segments properly
+- See `references/numerals.md` for the full numerics guide (digit families, separators, dates, time, currency, percentages, ordinals, phone numbers, math, mixed content)
 
 ### 3. Match the Right Register
 
@@ -79,6 +83,7 @@ This skill is not limited to one use case. Apply Persian capabilities to:
 | File | Purpose |
 |---|---|
 | `references/writing-standards.md` | Unicode, punctuation, numerals, RTL formatting |
+| `references/numerals.md` | Digit families, separators, dates, time, currency, percentages, ordinals, phone, math, mixed content |
 | `references/tone-register.md` | Formal/informal, ta'arof, politeness, greetings |
 | `references/common-mistakes.md` | AI error patterns in Persian + corrections |
 | `references/transliteration.md` | Standard romanization when Latin script is needed |
@@ -147,7 +152,10 @@ Test with these prompts:
 - [ ] Half-spaces used in compound words (می‌، نمی‌، ها، ترین)
 - [ ] Persian punctuation used (« » ، ؛ ؟)
 - [ ] Register is consistent (not mixing formal and colloquial)
-- [ ] Numbers match context (Persian numerals for prose, Western for code/technical)
+- [ ] Numbers match context: Persian digits (U+06F0–U+06F9) in prose, Western in code/technical
+- [ ] No Arabic-Indic digits (U+0660–U+0669) — check ۴/٤, ۵/٥, ۶/٦ especially
+- [ ] Separators inside numbers are ٬ (thousands), ٫ (decimal), ٪ (percent) — not `,` `.` `%`
+- [ ] Dates use Solar Hijri (شمسی); calendar is signaled when mixing with Gregorian
 - [ ] RTL formatting is intact — no broken punctuation or misplaced Latin fragments
 - [ ] Translation reads naturally, not like a calque
 - [ ] Cultural references are accurate and current

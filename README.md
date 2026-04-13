@@ -1,4 +1,4 @@
-# Persian Language Skill 🇮🇷
+# Persian Language Skill 📝
 
 An [OpenClaw](https://openclaw.ai) capability layer that gives your AI native-level Persian (Farsi) fluency across any task.
 
@@ -12,8 +12,38 @@ Stop AI Persian mistakes forever. This skill automatically fixes:
 - ✅ **Cultural context** — Ta'arof, Solar Hijri dates, Iranian conventions
 - ✅ **RTL formatting** — Persian punctuation (« » ، ؛ ؟)
 - ✅ **Natural translation** — Idioms, not word-for-word calques
+- ✅ **Persian numerals** — Correct digit family (۰-۹, not ٠-٩), proper separators (٬ ٫ ٪)
 
 Works for: Writing, translation, content generation, data extraction, code comments, and any Persian workflow.
+
+---
+
+## Recent Updates
+
+### v2.0 (April 2026) — Persian Numerals Overhaul
+
+**Major addition:** Comprehensive `numerals.md` reference file (13KB)
+
+**What changed:**
+- ✅ **Digit family correction** — Persian digits (۰-۹, U+06F0–U+06F9) vs Arabic-Indic (٠-٩, U+0660–U+0669)
+- ✅ **Persian separators** — Thousands ٬ (U+066C), decimal ٫ (U+066B), percent ٪ (U+066A)
+- ✅ **Solar Hijri dates** — Complete formatting guide (۱۴۰۵/۰۱/۲۴, ۲۴ فروردین ۱۴۰۵)
+- ✅ **Currency** — Toman vs Rial, proper formatting (۵۰٬۰۰۰ تومان)
+- ✅ **Phone numbers** — Iranian mobile/landline formats
+- ✅ **Ordinals** — اول، دوم، سوم vs ۱م، ۲م، ۳م
+- ✅ **Time, percentages, math** — Complete coverage
+- ✅ **Mixed content rules** — When to use Persian vs Western digits
+- ✅ **Quality checklist** — 12-point numeric verification
+
+**Why this matters:**
+- The #1 error in AI Persian output is wrong digit family (mixing ٤ with ۴)
+- The #2 error is using Western separators (`,` and `.`) in Persian numbers
+- This update fixes both permanently
+
+**Updated files:**
+- `SKILL.md` — Added numerals section to Core Instructions
+- `references/numerals.md` — NEW 13KB comprehensive guide
+- Quality checklist expanded with numeric checks
 
 ---
 
@@ -77,6 +107,28 @@ git clone https://github.com/nimaansari/persian-language.git
 نمی‌توانم کتاب‌ها را بخوانم
 ```
 
+### Persian Numerals (NEW v2.0)
+
+**❌ Wrong digit family (Arabic-Indic):**
+```
+قیمت ٤٥٬٠٠٠ تومان
+```
+
+**✅ Correct Persian digits:**
+```
+قیمت ۴۵٬۰۰۰ تومان
+```
+
+**❌ Western separators:**
+```
+۳.۱۴ درصد رشد ۱,۲۳۴,۵۶۷ نفر
+```
+
+**✅ Persian separators:**
+```
+۳٫۱۴ درصد رشد ۱٬۲۳۴٬۵۶۷ نفر
+```
+
 ---
 
 ## Testing
@@ -96,13 +148,14 @@ Test with these prompts after installation:
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | Core skill instructions with triggers and quality checklist |
-| `references/writing-standards.md` | Unicode, punctuation, numerals, RTL formatting rules |
+| `references/writing-standards.md` | Unicode, punctuation, RTL formatting rules |
+| `references/numerals.md` | **NEW** Digit families, separators, dates, currency, phone, time, math |
 | `references/tone-register.md` | Formal/informal registers, ta'arof, politeness guidelines |
 | `references/common-mistakes.md` | AI error patterns in Persian + corrections |
 | `references/transliteration.md` | Standard romanization when Latin script is needed |
 | `references/content-templates.md` | Ready-made templates: email, social, report, announcement |
 
-**Total:** 47KB of comprehensive Persian language guidance
+**Total:** 60KB of comprehensive Persian language guidance
 
 ---
 
