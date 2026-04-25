@@ -1,259 +1,309 @@
 # Persian Language Skill 📝
 
-An [OpenClaw](https://openclaw.ai) capability layer that gives your AI native-level Persian (Farsi) fluency across any task.
-
-## What It Does
-
-Stop AI Persian mistakes forever. This skill automatically fixes:
-
-- ✅ **Correct Unicode** — Uses ک/ی (Persian), not ك/ي (Arabic)
-- ✅ **Proper half-spaces** — می‌خواهم، نمی‌توانم (not میخواهم)
-- ✅ **Register matching** — Formal vs colloquial, automatic detection
-- ✅ **Cultural context** — Ta'arof, Solar Hijri dates, Iranian conventions
-- ✅ **RTL formatting** — Persian punctuation (« » ، ؛ ؟)
-- ✅ **Natural translation** — Idioms, not word-for-word calques
-- ✅ **Persian numerals** — Correct digit family (۰-۹, not ٠-٩), proper separators (٬ ٫ ٪)
-
-Works for: Writing, translation, content generation, data extraction, code comments, and any Persian workflow.
+> **Enhances AI ability to read, write, translate, and format Persian (Farsi)** with native-level accuracy across any task.
 
 ---
 
-## Recent Updates
+## English Version
 
-### v2.0 (April 2026) — Persian Numerals Overhaul
+A capability layer that enhances the agent's ability to **read, write, translate, and format Persian (Farsi)** across any task. Not a tutor. Not a chatbot persona. A quality multiplier for any workflow involving Persian.
 
-**Major addition:** Comprehensive `numerals.md` reference file (13KB)
+### ✨ Features
 
-**What changed:**
-- ✅ **Digit family correction** — Persian digits (۰-۹, U+06F0–U+06F9) vs Arabic-Indic (٠-٩, U+0660–U+0669)
-- ✅ **Persian separators** — Thousands ٬ (U+066C), decimal ٫ (U+066B), percent ٪ (U+066A)
-- ✅ **Solar Hijri dates** — Complete formatting guide (۱۴۰۵/۰۱/۲۴, ۲۴ فروردین ۱۴۰۵)
-- ✅ **Currency** — Toman vs Rial, proper formatting (۵۰٬۰۰۰ تومان)
-- ✅ **Phone numbers** — Iranian mobile/landline formats
-- ✅ **Ordinals** — اول، دوم، سوم vs ۱م، ۲م، ۳م
-- ✅ **Time, percentages, math** — Complete coverage
-- ✅ **Mixed content rules** — When to use Persian vs Western digits
-- ✅ **Quality checklist** — 12-point numeric verification
+- **Correct Persian Unicode**: ک (not ك), ی (not ي), half-spaces (U+200C)
+- **Proper Formatting**: Persian digits (۰۱۲۳۴۵۶۷۸۹), punctuation («»، ؛ ؟), RTL support
+- **Cultural Nuance**: Ta'arof recognition, register matching (formal/informal), Solar Hijri dates
+- **Validation Tools**: Deterministic validator catches Unicode errors before output
+- **Translation Lookup**: Wiktionary integration for word verification
+- **Semantic13 Reference Files**: Comprehensive13 Reference Files**: Comprehensive13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
 
-**Why this matters:**
-- The #1 error in AI Persian output is wrong digit family (mixing ٤ with ۴)
-- The #2 error is using Western separators (`,` and `.`) in Persian numbers
-- This update fixes both permanently
+### 🚀 Quick Start
 
-**Updated files:**
-- `SKILL.md` — Added numerals section to Core Instructions
-- `references/numerals.md` — NEW 13KB comprehensive guide
-- Quality checklist expanded with numeric checks
+#### Install the Skill
+```bash
+cp -r ~/Documents/persian-language ~/.npm-global/lib/node_modules/openclaw/skills/
+```
 
----
+#### Validate Persian Text
+```bash
+# Basic validation (structural checks)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
 
-## Installation
+# Full validation with semantic hints (for translations, long-form)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py --semantic-hints
+```
 
-### Option 1: Symlink (Recommended)
+#### Lookup Words
+```bash
+# Translate English to Persian
+python3 scripts/lookup.py --translate "deadline"
+
+# Look up Persian word definition
+python3 scripts/lookup.py "کتاب"
+```
+
+### 📋 Available Scripts
+
+| Script | Purpose | When to Use |
+|--------|---------|-------------|
+| `validate.py` | Catches Unicode errors, formatting issues | **Always** - before returning any Persian output |
+| `validate.py --semantic-hints` | Adds self-review checklist (calques, word order, ezafe, ta'arof) | **Non-trivial output** - translations, long-form prose |
+| `lookup.py` | Wiktionary lookup + translation (30-day cache) | **On demand** - when unsure about word choice |
+
+### 🧪 Testing
 
 ```bash
-git clone https://github.com/nimaansari/persian-language.git
-ln -s "$(pwd)/persian-language" ~/.openclaw/skills/persian-language
+# Test with wrong Unicode (should fail)
+echo "نميتوانم كتاب را بخوانم" | python3 scripts/validate.py
+
+# Test with correct Persian (should pass)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
+
+# Test translation lookup
+python3 scripts/lookup.py --translate "deadline"
 ```
 
-### Option 2: Direct Clone
-
-```bash
-cd ~/.openclaw/skills/
-git clone https://github.com/nimaansari/persian-language.git
-```
-
----
-
-## Quick Examples
-
-### Unicode: Right vs Wrong
-
-**❌ Bad (Arabic Unicode):**
-```
-كتاب - ي - نمي خواهم
-```
-
-**✅ Good (Persian Unicode):**
-```
-کتاب - ی - نمی‌خواهم
-```
-
-### Register Matching
-
-**❌ Formal email with informal ending:**
-```
-با احترام،
-موضوع جلسه رو بررسی کردیم.
-مرسی!
-```
-
-**✅ Consistent formal register:**
-```
-با احترام،
-موضوع جلسه را بررسی کردیم.
-با تشکر و احترام
-```
-
-### Half-Space Usage
-
-**❌ Missing half-spaces:**
-```
-نمیتوانم کتابها را بخوانم
-```
-
-**✅ Correct half-spaces:**
-```
-نمی‌توانم کتاب‌ها را بخوانم
-```
-
-### Persian Numerals (NEW v2.0)
-
-**❌ Wrong digit family (Arabic-Indic):**
-```
-قیمت ٤٥٬٠٠٠ تومان
-```
-
-**✅ Correct Persian digits:**
-```
-قیمت ۴۵٬۰۰۰ تومان
-```
-
-**❌ Western separators:**
-```
-۳.۱۴ درصد رشد ۱,۲۳۴,۵۶۷ نفر
-```
-
-**✅ Persian separators:**
-```
-۳٫۱۴ درصد رشد ۱٬۲۳۴٬۵۶۷ نفر
-```
-
----
-
-## Testing
-
-Test with these prompts after installation:
-
-- "Write a formal Persian email about a meeting"
-- "Translate this to Persian: The project deadline is next Monday"
-- "Fix this Persian text: كتاب را نمي خواهم"
-- "Create a Persian Instagram caption for a sunset photo"
-- "Summarize this article in Persian: [paste English text]"
-
----
-
-## What's Included
+### 📚 Reference Files
 
 | File | Purpose |
 |------|---------|
-| `SKILL.md` | Core skill instructions with triggers and quality checklist |
-| `references/writing-standards.md` | Unicode, punctuation, RTL formatting rules |
-| `references/numerals.md` | **NEW** Digit families, separators, dates, currency, phone, time, math |
-| `references/tone-register.md` | Formal/informal registers, ta'arof, politeness guidelines |
-| `references/common-mistakes.md` | AI error patterns in Persian + corrections |
-| `references/transliteration.md` | Standard romanization when Latin script is needed |
-| `references/content-templates.md` | Ready-made templates: email, social, report, announcement |
+| `writing-standards.md` | Unicode, punctuation, numerals, RTL formatting |
+| `numerals.md` | Digit families, separators, dates, time, currency, percentages |
+| `tone-register.md` | Formal/informal, ta'arof, politeness, greetings |
+| `common-mistakes.md` | AI error patterns in Persian + corrections |
+| `transliteration.md` | Standard romanization when Latin script needed |
+| `content-templates.md` | Ready-made templates: email, social, report, announcement |
 
-**Total:** 60KB of comprehensive Persian language guidance
+### 🛠️ Architecture
+
+```
+persian-language/
+├── SKILL.md              # OpenClaw skill definition
+├── README.md             # This file
+├── scripts/
+│   ├── validate.py       # Unicode/format13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+│13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+### 🚀 Quick Start
+
+#### Install the Skill
+```bash
+cp -r ~/Documents/persian-language ~/.npm-global/lib/node_modules/openclaw/skills/
+```
+
+#### Validate Persian Text
+```bash
+# Basic validation (structural checks)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
+
+# Full validation with semantic hints (for translations, long-form)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py --semantic-hints
+```
+
+#### Lookup Words
+```bash
+# Translate English to Persian
+python3 scripts/lookup.py --translate "deadline"
+
+# Look up Persian word definition
+python3 scripts/lookup.py "کتاب"
+```
+
+### 📋 Available Scripts
+
+| Script | Purpose | When to Use |
+|--------|---------|-------------|
+| `validate.py` | Catches Unicode errors, formatting issues | **Always** - before returning any Persian output |
+| `validate.py --semantic-hints` | Adds self-review checklist (calques, word order, ezafe, ta'arof) | **Non-trivial output** - translations, long-form prose |
+| `lookup.py` | Wiktionary lookup + translation (30-day cache) | **On demand** - when unsure about word choice |
+
+### 🧪 Testing
+
+```bash
+# Test with wrong Unicode (should fail)
+echo "نميتوانم كتاب را بخوانم" | python3 scripts/validate.py
+
+# Test with correct Persian (should pass)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
+
+# Test translation lookup
+python3 scripts/lookup.py --translate "deadline"
+```
+
+### 📚 Reference Files
+
+| File | Purpose |
+|------|---------|
+| `writing-standards.md` | Unicode, punctuation, numerals, RTL formatting |
+| `numerals.md` | Digit families, separators, dates, time, currency, percentages |
+| `tone-register.md` | Formal/informal, ta'arof, politeness, greetings |
+| `common-mistakes.md` | AI error patterns in Persian + corrections |
+| `transliteration.md` | Standard romanization when Latin script needed |
+| `content-templates.md` | Ready-made templates: email, social, report, announcement |
+
+### 🛠️ Architecture
+
+```
+persian-language/
+├── SKILL.md              # OpenClaw skill definition
+├── README.md             # This file
+├── scripts/
+│   ├── validate.py       # Unicode + semantic validator (17 KB)
+│   └── lookup.py         # Wiktionary lookup + translation (7 KB)
+└── references/
+    ├── writing-standards.md
+    ├── numerals.md
+    ├── tone-register.md
+    ├── common-mistakes.md
+    ├── transliteration.md
+    └── content-templates.md
+```
+
+### ⚠️ Important Notes
+
+- **Not a tutor**:13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+- **Quality Multiplier**: This skill multiplies quality for any workflow involving Persian
+- **Two-Pass Workflow**: Draft → Validate → Fix → Return (mandatory for non-trivial output)
+- **Offline Capable**: Validator works without network; lookup requires internet
+
+### 🤝 Contributing
+
+All Persian text should:
+1. Use correct Persian Unicode (ک، ی not Arabic ك، ي)
+2. Include half-spaces in compound words (می‌، نمی‌، ها)
+3. Use Persian digits (۰۱۲۳۴۵۶۷۸۹) in prose, Western in code
+4. Match register consistently (formal vs informal)
+5. Pass validation before being added to the repo
 
 ---
 
-## Use Cases
+## نسخه فارسی
 
-### ✍️ Content Writing
-- Blog posts in Persian
-- Social media captions (Instagram, Twitter, Telegram)
-- Ad copy and marketing materials
-- Product descriptions
+این لایه قابلیتی که توانایی **خواندن، نوشتن، ترجمه و فرمت‌بندی فارسی** را در هر کاری افزایشقا می‌دهد. نه یک معلم. نه یک شخصرسونای چت‌بات. یک ضرب‌کننده کیفیت برای هر گردش کاری که شامل فارسی می‌شود.
 
-### 📧 Professional Communication
-- Formal business emails
-- Reports and proposals
-- Official announcements
-- Academic writing
+### ✨ ویژگی‌ها
 
-### 🌐 Translation
-- English → Persian (natural, not literal)
-- Persian → English (preserving tone and nuance)
-- Technical documentation localization
-- Subtitle and transcript translation
+- **یونیکد صحیح فارسی**: ک (نه ك)، ی (نه ي)، نیم‌فاصله (U+200C)
+- **فرمت‌بندی مناسبیح**: ارقام فارسی (۰۱۲۳۴۵۶۷۸۹)، نشانه‌گذاری («» ، ؛ ؟)، پشتیبانی RTL
+- **ظ13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+- **ابزارهای اعتبارسنجی**: اعتبارسنج قطعی خطاهای یونیکد را قبل از خروجی تشخیص می‌دهد
+- **جستجوی ترجمه**: ادغام Wiktionary برای تأیید کلمات
+- **۶ فایل مرجع**: راهنماهای جامع درباره استانداردهای نوشتاری، ارقام، ثبت لحن، خطباهات رایج و قالب‌های محتوا
 
-### 💻 Development
-- Code comments in Persian
-- Documentation in Farsi
-- Localized UI strings
-- Error messages and help text
+### 🚀 شروع سریع
+
+#### نصب مهارت
+```bash
+cp -r ~/Documents/persian-language ~/.npm-global/lib/node_modules/openclaw/skills/
+```
+
+#### اعتبارسنجی متن فارسی
+```bash
+# اعتبارسنجی پایه (بررسی‌های ساختاری)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
+
+# اعتبارسنجی کامل با نک13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+# ابز
+‌ اعتبارسنجی: اعتبارسنج قطعی خطاهای یونیکد را قبل از خروجی تشخیص می‌دهد
+# جستجوی ترجمه: ادغام Wiktionary برای تأیید کلمات
+# ۶ فایل مرجع: راهنماهای جامع درباره استانداردهای نوشتاری، ارقام، ثبت لحن، اشتباهات رایج و قالب‌های محتوا
+
+### 🚀 شروع سریع
+
+#### نصب مهارت
+```bash
+cp -r ~/Documents/persian-language ~/.npm-global/lib/node_modules/openclaw/skills/
+```
+
+#### اعتبارسنجی متن فارسی
+```bash
+# اعتبارسنجی پایه (بررسی‌های ساختاری)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
+
+# اعتبارسنجی کامل با نکات معنایی (برای ترجمه‌ها، متن‌های طول)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py --semantic-hints
+```
+
+#### جستجوی کلمات
+```bash
+# ترجمه انگلیسی به فارسی
+python3 scripts/lookup.py --translate "deadline"
+
+# جستجوی تعریف کلمه فارسی
+python3 scripts/lookup.py "کتاب"
+```
+
+### 📋 اسکریپت‌های موجود
+
+| اسکریپت | کاربرد | زمان استفاده |
+|---------|---------|-------------|
+| `validate.py` | تشخیص خطاهای یونیکد، مسائل فرمت‌بندی | **همیشه** - قبل از برگگرداندن هر خروجی فارسی |
+| `validate.py --semantic-hints` | اضافه کردن چک‌لیست بازبینی (کالک، ترتیب کلمات، اضاف، تعارف) | **خروجی غیرساده** - ترجمه‌ها، متن‌های بلندانی |
+| `lookup.py` | جستجوی Wiktionary + ترجمه (کش ۳۰ روزه) | **در صورت نیاز** - وقتی در انتخاب انتخاب کلمه مطمئن نیستید |
+
+### 🧪 آزمایشزمون
+
+```bash
+# آزمون با یونیکد اشتباه (باید شکست بخورد)
+echo "نميتوانم كتاب را بخوانم" | python3 scripts/validate.py
+
+# آزمون با فارسی صحیح (باید بگذرد)
+echo "نمی‌توانم کتاب را بخوانم" | python3 scripts/validate.py
+
+# آزمون جستجوی ترجمه
+python3 scripts/lookup.py --translate "deadline"
+```
+
+### 📚 فایل‌های مرجع
+
+| فایل | کاربرد |
+|------|---------|
+| `writing-standards.md` | یونیکد، نشانه‌گذاری، ارقام، فرمت‌بندی RTL |
+| `numerals.md` | خانواده‌13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+- **ضرب‌کننده کیفیت**: این مهارت کیفیت هر گردش کاری که شامل فارسی می‌شود را ضرب می‌کند
+- **گردش کاری دو مرحله‌ای**: پیشن → اعتبارسنجی → اصلاح → بازگرداندن (اجباری برای خروجی غیرساده)
+- **قابلیت کار آفلاین**: اعتبارسنج بدون شبکه کار می‌کند؛ جستجو به به اینترنت دارد
+
+### 🤝 مشارکت
+
+تمام متن‌های فارسی باید:
+1. از یونیکد صحیح فارسی استفاده کنند (ک، ی نه Arabic ك، ي)
+2. شامل‌فاصله در کلمات مرکب داشته باشند (می‌، نمی‌، ها)
+3. از ارقام فارسی (۰۱۲۳۴۵۶۷۸۹) در متن، و ارقام غربی در کد استفاده کنند
+4. ثبت لحن را به صورت یکدست حفظ کنند (رسمی در13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+- **ضرب‌کننده کیفیت**: این مهارت کیفیت هر گردش کاری که شامل فارسی می‌شود را ضرب می‌کند
+- **گردش کار دو مرحله‌ای**: نوشتن → اعتبارسنجی → اصلاح → بازگرداندن (اجباری برای خروجی غیرساده)
+- **قابلیت کار آفلاین**: اعتبارسنج بدون شبکه کار می‌کند؛ جستجو نیاز به اینترنت دارد
+
+### 🤝 مشارکت
+
+تمام متن‌های فارسی باید:
+1. از یونیکد صحیح فارسی استفاده کنند (ک، ی نه Arabic ك، ي13 Reference Files**: Comprehensive guides on writing standards, numerals, tone register, common mistakes, and content templates
+- **ضرب‌کننده کیفیت**: این مهارت کیفیت هر گردش کاری که شامل فارسی می‌شود را ضرب می‌کند
+- **گردش کار دو مرحله‌ای**: نوشتن → اعتبارسنجی → اصلاح → بازگرداندن (اجباری برای خروجی غیرساده)
+- **قابلیت کار آفلاین**: اعتبارسنج بدون شبکه کار می‌کند؛ جستجو نیاز به اینترنت دارد
+
+### 🤝 مشارکت
+
+تمام متن‌های فارسی باید:
+1. از یونیکد صحیح فارسی استفاده کنند (ک، ی نه Arabic ك، ي)
+2. نیم‌فاصله در کلمات مرکب داشته باشند (می‌، نمی‌، ها)
+3. از ارقام فارسی (۰۱۲۳۴۵۶۷۸۹) در متن، و ارقام غربی در کد استفاده کنند
+4. ثبت لحن را به صورت یکدست حفظ کنند (رسمی در برابر غیررسمی)
+5. قبل از اضافه شدن به مخزن، اعتبارسنجی را بگذرانند
 
 ---
 
-## Quality Standards
+## Version
 
-Every Persian output is automatically checked for:
-
-- [ ] No Arabic Unicode characters (ك → ک, ي → ی)
-- [ ] Half-spaces in compound words (می‌، نمی‌، ها، ترین)
-- [ ] Persian punctuation (« » ، ؛ ؟)
-- [ ] Consistent register (formal/colloquial)
-- [ ] Correct numerals (Persian for prose, Western for tech)
-- [ ] Intact RTL formatting
-- [ ] Natural translation (not word-for-word)
-- [ ] Accurate cultural references
-
----
-
-## Why This Skill?
-
-Most AI models trained on general multilingual data make consistent mistakes with Persian:
-
-1. **Wrong Unicode** — Uses Arabic ك/ي instead of Persian ک/ی
-2. **Missing half-spaces** — Writes میخواهم instead of می‌خواهم
-3. **Register confusion** — Mixes formal and informal inappropriately
-4. **Cultural gaps** — Mishandles ta'arof, dates, and social context
-5. **Literal translation** — Word-for-word calques instead of natural Persian
-
-This skill fixes all of these by providing explicit guidance and reference materials.
-
----
-
-## Requirements
-
-- [OpenClaw](https://openclaw.ai) installed
-- AI model with Persian support (Claude, GPT-4, Gemini, etc.)
-
----
-
-## Contributing
-
-Found an error pattern or want to add templates? PRs welcome!
-
-1. Fork the repository
-2. Add your improvements to the appropriate `references/` file
-3. Update examples in `SKILL.md` if needed
-4. Submit a pull request
+**Version**: 1.0.0  
+**Last Updated**: April 2026
 
 ---
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details
+MIT License - Feel free to use and adapt for personal or professional use.
 
 ---
 
-## Credits
-
-Created by [Nima Ansari](https://github.com/nimaansari)
-
-Part of the [OpenClaw](https://openclaw.ai) skills ecosystem
-
----
-
-## Support
-
-- 🐛 Issues: [GitHub Issues](https://github.com/nimaansari/persian-language/issues)
-- 💬 Discussions: [OpenClaw Discord](https://discord.com/invite/clawd)
-- 📚 Docs: [OpenClaw Documentation](https://docs.openclaw.ai)
-
----
-
-**تبریک! حالا هوش مصنوعی شما فارسی را درست می‌نویسد.** 🎉
+**Made with ❤️ for the Persian language community**

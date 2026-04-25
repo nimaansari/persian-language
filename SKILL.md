@@ -89,6 +89,57 @@ This skill is not limited to one use case. Apply Persian capabilities to:
 | `references/transliteration.md` | Standard romanization when Latin script is needed |
 | `references/content-templates.md` | Ready-made templates: email, social, report, announcement |
 
+## Tooling (use these — do not skip)
+
+These scripts exist because rules-on-paper aren't enough for every model. A
+weaker model can read "use ک not ك" and still emit the wrong character. The
+validator catches that deterministically; the lookup is a safety net for
+words you're unsure about.
+
+| Script | Purpose | When to call |
+|---|---|---|
+| `scripts/validate.py` | **Offline.** Catches Arabic kaf/ya, Arabic-Indic digits, missing half-spaces, ASCII punctuation in Persian, wrong number separators, register mixing. | **Always** — on every Persian output before returning it. |
+| `scripts/validate.py --semantic-hints` | **Offline.** Same structural checks **plus** a self-review checklist (calques, word order, ezafe, light verbs, ta'arof calibration, …) and low-confidence flags for suspect patterns (`یک`+noun, `که` clusters, sentence-initial pronouns). | **For non-trivial output** — translations, long-form prose, customer-facing content. Skip for one-line replies. |
+| `scripts/lookup.py`   | **Online.** Looks up a word in fa.wiktionary / en.wiktionary; can also translate via MyMemory. Cached locally for 30 days. | **On demand** — when you're unsure a word is real Persian, or want to sanity-check a translation. Do not call on every word. |
+
+## Required Workflow (two-pass)
+
+This workflow is mandatory for any non-trivial Persian output. Skipping it is
+the single biggest cause of low-quality Persian from weaker models.
+
+1. **Draft.** Produce the Persian output following the Core Instructions.
+2. **Validate.** Pipe the draft through the validator:
+   ```bash
+   echo "$DRAFT" | python3 ~/Documents/persian-language/scripts/validate.py
+   ```
+   For non-trivial output (translations, long prose, customer-facing text),
+   add `--semantic-hints` to also receive the self-review checklist and
+   suspect-pattern flags:
+   ```bash
+   echo "$DRAFT" | python3 ~/Documents/persian-language/scripts/validate.py --semantic-hints
+   ```
+   - Exit 0 + `{"status": "clean"}` → proceed (structural checks passed).
+   - Exit 1 + findings → fix every `error`, decide on each `warning`, re-run.
+   - `info`-severity findings (only with `--semantic-hints`) are advisory:
+     review each, but they don't fail the run.
+   - The `semantic-checklist` JSON object at the end of `--semantic-hints`
+     output is your self-review prompt: walk every item, revise the draft
+     where the answer is "no", and re-run.
+3. **(Optional) Look up uncertain words.** If you used a word and aren't sure
+   it's correct Persian, or you translated an English term and want to
+   confirm the choice:
+   ```bash
+   python3 ~/Documents/persian-language/scripts/lookup.py <word>
+   python3 ~/Documents/persian-language/scripts/lookup.py --translate "deadline"
+   ```
+   A "not found" result is **not** proof the word is wrong — Wiktionary is
+   incomplete. Treat it as a hint to double-check, not a verdict.
+4. **Return** the corrected output.
+
+If the host environment cannot run Python or has no network, fall back to
+the manual Quality Checklist at the bottom of this file — but say so
+explicitly in your reply so the user knows the validator was skipped.
+
 ---
 
 ## Quick Examples
