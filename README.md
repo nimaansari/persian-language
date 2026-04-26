@@ -227,4 +227,4 @@ MIT License - Feel free to use and adapt for personal or professional use.
 
 ---
 
-**Made with ❤️ for the Persian language community**
+**Made with ❤️ for the Persian community**
